@@ -8,6 +8,7 @@ __version__    = '0.9.6'
 import logging
 import django_rq
 import pprint
+from django.conf import settings
 
 from nornir.core.plugins.inventory import InventoryPluginRegister
 from .nornir_inventory import AssetInventory
@@ -20,7 +21,7 @@ def discovery(addresses):
     # Configuring Nornir
     logger = logging.getLogger("nornir")
     logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler("nornir.log")
+    fh = logging.FileHandler(f"{settings.BASE_DIR}/nornir.log")
     fh.setLevel(logging.DEBUG)
     logger.addHandler(fh)
 
