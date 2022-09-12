@@ -124,6 +124,16 @@ sudo systemctl start netbox netbox-rq apache2
 
 Netbox is listening by default on localhost:8001 (see `/opt/netbox/contrib/gunicorn.py`). Apache is serving as a reverse proxy.
 
+## Usint NetDoc on an existing netbox installation
+
+NetDoc uses interface labels as a primary key for interfaces. Labels are populated with a interface shortname. The reason is simple: based on different outputs (especially on Cisco devices), interface name can be shortened. To correlate the interface name between many outputs, a shotname is created.
+
+If you are using NetDoc on an existing netbox installation, you need to generate interface labels (shortnames) for each interface in the database. You can do that with the provided scripts:
+
+~~~
+./manage.py shell < set_interface_shortname.django
+~~~
+
 ## Developing NetDoc
 
 Install NetDoc as a development module:

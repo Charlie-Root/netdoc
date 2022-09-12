@@ -1,0 +1,15 @@
+"""
+Set interface label (shortname) used by NetDoc to identify interfaces with partial name.
+
+The script should be used on existent netbox installation BEFORE running NetDoc.
+
+Usage:
+./manage.py shell < set_interface_shortname.django
+"""
+
+from dcim.models import Interface
+from netdoc.ingestors.functions import short_interface_name
+
+for i in Interface.objects.all():
+    i.label = short_interface_name(i.name)
+    i.save()
