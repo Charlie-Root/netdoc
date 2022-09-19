@@ -2,7 +2,7 @@ __author__     = 'Andrea Dainese'
 __contact__    = 'andrea@adainese.it'
 __copyright__  = 'Copyright 2022, Andrea Dainese'
 __license__    = 'GPLv3'
-__date__       = '2022-09-07'
+__date__       = '2022-09-19'
 __version__    = '0.9.6'
 
 import json
@@ -148,11 +148,11 @@ def discovery(nr):
             for vrf in vrfs:
                 if vrf == "default":
                     # Default VRF has no name
-                    task.run(task=netmiko_send_command, name="show ip arp", command_string="show ip arp", use_textfsm=False)
-                    task.run(task=netmiko_send_command, name="show ip route", command_string="show ip route", use_textfsm=False)
+                    task.run(task=netmiko_send_command, name="show ip arp", command_string="show ip arp", use_textfsm=False, enable=enable)
+                    task.run(task=netmiko_send_command, name="show ip route", command_string="show ip route", use_textfsm=False, enable=enable)
                 else:
-                    task.run(task=netmiko_send_command, name=f'show ip arp|show ip arp vrf {vrf}', command_string=f'show ip arp vrf {vrf}', use_textfsm=False)
-                    task.run(task=netmiko_send_command, name=f'show ip route|show ip route vrf {vrf}', command_string=f'show ip route vrf {vrf}', use_textfsm=False)
+                    task.run(task=netmiko_send_command, name=f'show ip arp|show ip arp vrf {vrf}', command_string=f'show ip arp vrf {vrf}', use_textfsm=False, enable=enable)
+                    task.run(task=netmiko_send_command, name=f'show ip route|show ip route vrf {vrf}', command_string=f'show ip route vrf {vrf}', use_textfsm=False, enable=enable)
 
         # Run the additional playbook
         additional_aggregated_results = current_nr.run(task=additional_tasks)
