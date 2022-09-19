@@ -162,6 +162,24 @@ from netdoc import tasks
 tasks.discovery(["172.25.82.34","172.25.82.39","172.25.82.40"])
 ~~~
 
+NTC template:
+
+~~~
+import textfsm
+import pprint
+
+template_file = 'ntc_templates/templates/cisco_xr_show_ipv4_interface.textfsm'
+raw_output_file = 'tests/cisco_xr/show_ipv4_interface/cisco_xr_show_ipv4_interface.raw'
+
+with open(template_file) as fd_t, open(raw_output_file) as fd_o:
+    re_table = textfsm.TextFSM(fd_t)
+    parsed_header = re_table.header
+    parsed_output = re_table.ParseText(fd_o.read())
+
+pprint.pprint(parsed_header)
+pprint.pprint(parsed_output)
+~~~
+
 Parsers:
 
 ~~~

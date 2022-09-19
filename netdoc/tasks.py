@@ -2,7 +2,7 @@ __author__     = 'Andrea Dainese'
 __contact__    = 'andrea@adainese.it'
 __copyright__  = 'Copyright 2022, Andrea Dainese'
 __license__    = 'GPLv3'
-__date__       = '2022-09-07'
+__date__       = '2022-09-13'
 __version__    = '0.9.6'
 
 import logging
@@ -14,7 +14,7 @@ from nornir.core.plugins.inventory import InventoryPluginRegister
 from .nornir_inventory import AssetInventory
 from nornir import InitNornir
 from nornir.core.filter import F
-from . import discovery_cisco_ios, discovery_cisco_nxos, discovery_cisco_xr
+from . import discovery_linux, discovery_cisco_ios, discovery_cisco_nxos, discovery_cisco_xr
 
 
 def discovery(addresses):
@@ -46,6 +46,7 @@ def discovery(addresses):
 
     # Starting discovery job
     pprint.pprint(nr.dict())
+    discovery_linux.discovery(nr)
     discovery_cisco_ios.discovery(nr)
     discovery_cisco_nxos.discovery(nr)
     discovery_cisco_xr.discovery(nr)

@@ -2,7 +2,7 @@ __author__     = 'Andrea Dainese'
 __contact__    = 'andrea@adainese.it'
 __copyright__  = 'Copyright 2022, Andrea Dainese'
 __license__    = 'GPLv3'
-__date__       = '2022-09-07'
+__date__       = '2022-09-13'
 __version__    = '0.9.6'
 
 from django.contrib.postgres.fields import ArrayField
@@ -23,6 +23,7 @@ class DiscoveryModeChoices(ChoiceSet):
         ('netmiko_cisco_ios', 'Netmiko Cisco IOS'),
         ('netmiko_cisco_nxos', 'Netmiko Cisco NX-OS'),
         ('netmiko_cisco_xr', 'Netmiko Cisco XR'),
+        ('netmiko_linux', 'Netmiko Linux'),
     ]
 
 

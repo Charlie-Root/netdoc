@@ -6,7 +6,7 @@ __author__     = 'Andrea Dainese'
 __contact__    = 'andrea@adainese.it'
 __copyright__  = 'Copyright 2022, Andrea Dainese'
 __license__    = 'GPLv3'
-__date__       = '2022-09-07'
+__date__       = '2022-09-13'
 __version__    = '0.9.6'
 
 from nornir.core.inventory import Inventory, Host, Hosts, Group, Groups, ParentGroups, Defaults, ConnectionOptions
@@ -52,38 +52,38 @@ class AssetInventory:
         # Load discoverable hosts
         for discoverable in models.Discoverable.objects.filter(discoverable=True):
 
-            if discoverable.mode.startswith("netmiko_"):
-                credential = discoverable.credential
-                # Add hosts discoverable via Netmiko
-                device_type = "_".join(discoverable.mode.split("_")[1:])
-                data = {
-                    "site_id": discoverable.site.pk,
-                    "site": discoverable.site.slug,
-                }
+            credential = discoverable.credential
+            # Add hosts discoverable via Netmiko
+            device_type = "_".join(discoverable.mode.split("_")[1:])
+            data = {
+                "site_id": discoverable.site.pk,
+                "site": discoverable.site.slug,
+            }
 
-                host_key = discoverable.address
-                host_groups = [device_type, f'site-{data["site"]}']
+            host_key = discoverable.address
+            host_groups = [device_type, f'site-{data["site"]}']
 
-                connection_options = None
-                if credential.enable_password:
-                    connection_options = {'netmiko': ConnectionOptions(extras={'secret': credential.enable_password})}
+            connection_options = None
+            if credential.enable_password:
+                connection_options = {'netmiko': ConnectionOptions(extras={'secret': credential.enable_password})}
 
-                hosts[host_key] = Host(
-                    name=host_key,
-                    hostname=discoverable.address,
-                    username=credential.username,
-                    password=credential.password,
-                    port=22,
-                    platform=device_type,
-                    data=data,
-                    groups=ParentGroups(),
-                    connection_options=connection_options,
-                )  # name is the key used in AggregatedResults, the form is: tenant:id:ip_address
+            hosts[host_key] = Host(
+                name=host_key,
+                hostname=discoverable.address,
+                username=credential.username,
+                password=credential.password,
+                port=22,
+                platform=device_type,
+                data=data,
+                groups=ParentGroups(),
+                connection_options=connection_options,
+            )  # name is the key used in AggregatedResults, the form is: tenant:id:ip_address
 
-                # Add groups
-                for host_group in host_groups:
-                    if host_group not in dict(groups):
-                        groups[host_group] = Group(host_group)
-                    hosts[host_key].groups.append(Group(host_group))
+            # Add groups
+            for host_group in host_groups:
+                if host_group not in dict(groups):
+                    groups[host_group] = Group(host_group)
+                hosts[host_key].groups.append(Group(host_group))
+
 
         return Inventory(hosts=hosts, groups=groups, defaults=defaults)
