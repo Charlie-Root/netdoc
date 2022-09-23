@@ -99,13 +99,17 @@ class CredentialBulkImportView(generic.BulkImportView):
 class CredentialBulkEditView(generic.BulkEditView):
     queryset = models.Credential.objects.all()
     table = tables.CredentialTable
-    form = forms.CredentialBulkEditForm
+    default_return_url = 'plugins:netdoc:credential_list'
+    filterset = filtersets.CredentialFilterSet
+    # form = forms.CredentialBulkEditForm
 
 
 class CredentialBulkDeleteView(generic.BulkDeleteView):
     queryset = models.Credential.objects.all()
     table = tables.CredentialTable
-    default_return_url = 'netdoc:credential_list'
+    default_return_url = 'plugins:netdoc:credential_list'
+    filterset = filtersets.CredentialFilterSet
+    # form = forms.CredentialBulkDeleteForm
 
 
 #
@@ -160,7 +164,7 @@ class DiscoverableBulkEditView(generic.BulkEditView):
 class DiscoverableBulkDeleteView(generic.BulkDeleteView):
     queryset = models.Discoverable.objects.prefetch_related('credential')
     table = tables.DiscoverableTable
-    default_return_url = 'netdoc:discoverable_list'
+    default_return_url = 'plugins:netdoc:discoverable_list'
 
 
 class DiscoverableDiscoverView(generic.ObjectDeleteView):
@@ -258,7 +262,7 @@ class DiscoverableBulkDiscoverView(generic.BulkDeleteView):
     queryset = models.Discoverable.objects.prefetch_related('credential')
     filterset = None
     table = tables.DiscoverableTable
-    default_return_url = 'netdoc:discoverable_list'
+    default_return_url = 'plugins:netdoc:discoverable_list'
 
     def get_required_permission(self):
         """
@@ -348,7 +352,7 @@ class DiscoveryLogDeleteView(generic.ObjectDeleteView):
 class DiscoveryLogBulkDeleteView(generic.BulkDeleteView):
     queryset = models.DiscoveryLog.objects.all()
     table = tables.DiscoveryLogTable
-    default_return_url = 'netdoc:discoverylog_list'
+    default_return_url = 'plugins:netdoc:discoverylog_list'
 
 
 #

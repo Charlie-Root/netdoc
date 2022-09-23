@@ -62,7 +62,6 @@ class CredentialBulkEditForm(NetBoxModelBulkEditForm):
     nullable_fields = ('username', 'password', 'enable_password')
 
 
-
 #
 # Discoverable views
 #

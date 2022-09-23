@@ -41,7 +41,7 @@ class CredentialTable(NetBoxTable):
 
     class Meta(NetBoxTable.Meta):
         model = models.Credential
-        fields = ('pk', 'id', 'username', 'discoverables_count')
+        fields = ('pk', 'id', 'name', 'username', 'discoverables_count')
         default_columns = ('name', 'username', 'discoverables_count')
 
 
