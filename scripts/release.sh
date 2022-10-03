@@ -10,8 +10,12 @@ fi
 
 find . -type f -name "*.py" -exec sed -i "s/^__version__.*$/__version__    = '${NEXT_RELEASE}'/g" {} \;
 find . -type f -name "*.html" -exec sed -i "s/^__version__.*$/__version__    = '${NEXT_RELEASE}'/g" {} \;
+rm -rf dist
 
+git add -A
+git commit -m "Release ${NEXT_RELEASE}"
 python3 setup.py sdist
 twine upload dist/*
 git tag ${NEXT_RELEASE}
+git push
 git push origin --tags

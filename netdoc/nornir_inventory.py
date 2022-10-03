@@ -7,7 +7,7 @@ __contact__    = 'andrea@adainese.it'
 __copyright__  = 'Copyright 2022, Andrea Dainese'
 __license__    = 'GPLv3'
 __date__       = '2022-09-13'
-__version__    = '0.9.6'
+__version__    = '0.9.8'
 
 from nornir.core.inventory import Inventory, Host, Hosts, Group, Groups, ParentGroups, Defaults, ConnectionOptions
 from . import models

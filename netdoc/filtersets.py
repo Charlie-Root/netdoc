@@ -3,7 +3,7 @@ __contact__    = 'andrea@adainese.it'
 __copyright__  = 'Copyright 2022, Andrea Dainese'
 __license__    = 'GPLv3'
 __date__       = '2022-09-07'
-__version__    = '0.9.6'
+__version__    = '0.9.8'
 
 from netbox.filtersets import NetBoxModelFilterSet
 from .models import Discoverable, Credential, DiscoveryLog, ArpTableEntry, MacAddressTableEntry, RouteTableEntry

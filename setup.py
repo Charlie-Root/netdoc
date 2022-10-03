@@ -12,13 +12,13 @@ __contact__    = 'andrea@adainese.it'
 __copyright__  = 'Copyright 2022, Andrea Dainese'
 __license__    = 'GPLv3'
 __date__       = '2022-09-07'
-__version__    = '0.9.6'
+__version__    = '0.9.8'
 
 from setuptools import find_packages, setup
 
 setup(
     name='netdoc',
-    version='0.9.6',
+    version=__version__,
     description='Network Documentation plugin for NetBox',
     url='https://github.com/dainok/netdoc',
     author='Andrea Dainese',
