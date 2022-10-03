@@ -5,6 +5,7 @@ __license__    = 'GPLv3'
 __date__       = '2022-09-13'
 __version__    = '0.9.6'
 
+import os
 import logging
 import django_rq
 import pprint
@@ -18,6 +19,14 @@ from . import discovery_linux, discovery_cisco_ios, discovery_cisco_nxos, discov
 
 
 def discovery(addresses):
+    ntc_template_dir = os.environ.get("NET_TEXTFSM")
+    if not ntc_template_dir:
+        logging.error("NET_TEXTFSM not set in configuration.py")
+        raise Exception("NET_TEXTFSM not set")
+    elif not os.path.exists(ntc_template_dir):
+        logging.error(f"{ntc_template_dir} not found")
+        raise Exception("NET_TEXTFSM not found")
+
     # Configuring Nornir
     logger = logging.getLogger("nornir")
     logger.setLevel(logging.DEBUG)
