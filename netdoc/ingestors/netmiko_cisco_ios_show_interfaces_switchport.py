@@ -35,23 +35,35 @@ def ingest(log, force=False):
         discoverable_o = log.discoverable
         interface_name = item['interface']
         site_o = log.discoverable.site
+
+        if not item['mode']:
+            continue
         mode = functions.normalize_switchport_mode(item['mode'])
+
+        if not item['native_vlan']:
+            continue
         native_vlan=int(item["native_vlan"])
+        
         trunking_vlans=functions.normalize_trunking_vlans(item["trunking_vlans"])
-        access_vlan=int(item["access_vlan"])
+
+        if item["access_vlan"] == 'unassigned':
+            access_vlan=0
+        else:
+            access_vlan=int(item["access_vlan"])
+
         if mode == 'tagged' and len(trunking_vlans) == 4094:
             # Trunk with all VLANs
             args = {'mode': 'tagged-all'}
         elif mode == 'tagged':
             # Trunk with some VLANs
-            vlan_o = functions.set_get_vlan(vid=access_vlan, site=site_o)
+            vlan_o = functions.set_get_vlan(vid=native_vlan, site=site_o)
             args = {
                 'mode': mode,
                 'untagged_vlan': vlan_o,
             }
         else:
             # Access
-            vlan_o = functions.set_get_vlan(vid=native_vlan, site=site_o)
+            vlan_o = functions.set_get_vlan(vid=access_vlan, site=site_o)
             args = {
                 'mode': mode,
                 'untagged_vlan': vlan_o,
