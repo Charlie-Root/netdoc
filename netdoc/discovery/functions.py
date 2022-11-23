@@ -19,17 +19,32 @@ INVALID_RE = [
     r"% \w* not active$", # Cisco XR put datetime before the error
 ]
 
-# Validate JSON
 
-# Run Netmiko task
 def nornir_add_netnmiko_task(task, command, ntc_template=None, configuration=False, enable=True):
+    """Add a netmiko task with metadata into nornir
+
+    Parameters:
+    ----------
+    task : ???
+    command: str
+        The command to be run via netmiko.
+    ntc_template: str, optional
+        The command use to refer to NTC template (often equals to command). If None, output won't be parsed.
+    configuration: bool, optional
+        True if the output contains the running/startup configuration.
+    enable: bool, optional
+        True if enable command is required to elevate privileges.
+    """
+
     attributes = {
+        # Stored as task name and used in the discovery task
         'task': 'netmiko_send_command',
         'command': command,
         'ntc_template': ntc_template,
         'configuration': configuration;
         'enable': enable,
     }
+
     task.run(
         task=netmiko_send_command,
         name=json.dumps(attributes),
