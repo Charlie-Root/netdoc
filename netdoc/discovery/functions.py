@@ -20,7 +20,7 @@ INVALID_RE = [
 ]
 
 
-def nornir_add_netnmiko_task(task, command, ntc_template=None, configuration=False, enable=True):
+def nornir_add_netnmiko_task(task, command, ingestor=None, configuration=False, enable=True):
     """Add a netmiko task with metadata into nornir
 
     Parameters:
@@ -28,8 +28,8 @@ def nornir_add_netnmiko_task(task, command, ntc_template=None, configuration=Fal
     task : ???
     command: str
         The command to be run via netmiko.
-    ntc_template: str, optional
-        The command use to refer to NTC template (often equals to command). If None, output won't be parsed.
+    ingestor: str, optional
+        The command use to ingest data. If None, output won't be parsed/ingested.
     configuration: bool, optional
         True if the output contains the running/startup configuration.
     enable: bool, optional
@@ -38,9 +38,10 @@ def nornir_add_netnmiko_task(task, command, ntc_template=None, configuration=Fal
 
     attributes = {
         # Stored as task name and used in the discovery task
+        # If "|" in command, split and use it as ingestor
         'task': 'netmiko_send_command',
-        'command': command,
-        'ntc_template': ntc_template,
+        'command': command.replace("|", ""),
+        'ingestor': command.split("|")[0] if "|" in command, else command.replace("|", ""),
         'configuration': configuration;
         'enable': enable,
     }

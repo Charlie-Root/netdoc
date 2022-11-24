@@ -25,27 +25,27 @@ def discovery(nr):
 
     # Define commands
     commands = [
-        # Config (bool), CMD (str), ntc_template (str)
-        (True,  "show running-config",            None),
-        (False, "show version",                   "show version"),
-        (False, "show logging",                   "show logging"),
-        (False, "show interfaces",                "show interfaces"),
-        (False, "show cdp neighbors detail",      "show cdp neighbors detail"),
-        (False, "show lldp neighbors detail",     "show lldp neighbors detail"),
-        (False, "show vlan",                      "show vlan"),
-        (False, "show mac address-table dynamic", "show mac address-table"),
-        (False, "show vrf",                       "show vrf"),
-        (False, "show ip interface",              "show ip interface"),
-        (False, "show etherchannel summary",      "show etherchannel summary"),
-        (False, "show interfaces switchport",     "show interfaces switchport"),
-        (False, "show spanning-tree",             "show spanning-tree"),
-        (False, "show interfaces trunk",          "show interfaces trunk"),
-        (False, "show standby",                   "show standby"),
-        (False, "show vrrp",                      "show vrrp"),
-        (False, "show glbp",                      "show glbp"),
-        (False, "show ip ospf neighbor",          "show ip ospf neighbor"),
-        (False, "show ip eigrp neighbors",        "show ip eigrp neighbors"),
-        (False, "show ip bgp neighbors",          "show ip bgp neighbors"),
+        # Config (bool), CMD (str), Ingestor
+        (True,  "show running-config"),
+        (False, "show version"),
+        (False, "show logging"),
+        (False, "show interfaces"),
+        (False, "show cdp neighbors detail"),
+        (False, "show lldp neighbors detail"),
+        (False, "show vlan"),
+        (False, "show mac address-table dynamic"),
+        (False, "show vrf"),
+        (False, "show ip interface"),
+        (False, "show etherchannel summary"),
+        (False, "show interfaces switchport"),
+        (False, "show spanning-tree"),
+        (False, "show interfaces trunk"),
+        (False, "show standby"),
+        (False, "show vrrp"),
+        (False, "show glbp"),
+        (False, "show ip ospf neighbor"),
+        (False, "show ip eigrp neighbors"),
+        (False, "show ip bgp neighbors"),
     ]
 
     # Define tasks
@@ -55,7 +55,7 @@ def discovery(nr):
         """
         for command in commands:
             functions.nornir_add_netnmiko_task(
-                task, command=commands[1], ntc_template=commands[2], configuration=commands[0], enable=enable,
+                task, command=commands[1], configuration=commands[0], enable=enable,
             )
 
     # Run the playbook
@@ -84,13 +84,13 @@ def discovery(nr):
         for vrf in vrfs:
             if vrf == "default":
                 additional_commands.extend([
-                    (False,  "show ip arp",             "show ip arp"),
-                    (False,  "show ip route",           "show ip route"),
+                    (False,  "show ip arp"),
+                    (False,  "show ip route"),
                 ]
             else:
                 additional_commands.extend([
-                    (False, f"show ip arp vrf {vrf}",   "show ip arp"),
-                    (False, f"show ip route vrf {vrf}", "show ip route"),
+                    (False, f"show ip arp|vrf {vrf}"),
+                    (False, f"show ip route|vrf {vrf}"),
                 ]
 
         # Additional commands out of the multi result loop
