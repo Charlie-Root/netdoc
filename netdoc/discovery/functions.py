@@ -75,8 +75,9 @@ def log_result(result):
         command=attributes["command"],
         configuration=attributes["configuration"],
         discoverable=discoverable,
-        request=attributes["ntc_template"],
         raw_output=result.result,
+        enable=attributes["enable"],
+        ingestor=attributes["ingestor"],
     )
 
     # Try to parse
@@ -85,12 +86,11 @@ def log_result(result):
     except:
         pass
 
-    # # Try to ingest
-    # try:
-    #     log = log_ingest(log)
-    # except:
-    #     pass
-    # TODO: should review before create/update
+    # Try to ingest
+    try:
+        log = log_ingest(log)
+    except:
+        pass
 
     return log
 
