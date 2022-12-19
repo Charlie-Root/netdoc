@@ -17,6 +17,7 @@ from nornir import InitNornir
 from nornir.core.filter import F
 from . import discovery_linux, discovery_cisco_ios, discovery_cisco_nxos, discovery_cisco_xr
 
+PLUGIN_SETTINGS = settings.PLUGINS_CONFIG.get('netdoc', {})
 
 def discovery(addresses):
     ntc_template_dir = os.environ.get("NET_TEXTFSM")
@@ -30,7 +31,7 @@ def discovery(addresses):
     # Configuring Nornir
     logger = logging.getLogger("nornir")
     logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler(f"{settings.BASE_DIR}/nornir.log")
+    fh = logging.FileHandler(PLUGIN_SETTINGS.get('NORNIR_LOG'))
     fh.setLevel(logging.DEBUG)
     logger.addHandler(fh)
 

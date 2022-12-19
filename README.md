@@ -86,7 +86,8 @@ REDIS = {
 PLUGINS = ['netdoc', 'netbox_topology_views']
 PLUGINS_CONFIG = {
     'netdoc': {
-        'NTC_TEMPLATES_DIR': '/opt/ntc-templates/ntc_templates/templates'
+        'NTC_TEMPLATES_DIR': '/opt/ntc-templates/ntc_templates/templates',
+        'NORNIR_LOG': '/tmp/nornir.log'
     },
     'netbox_topology_views': {
         'allow_coordinates_saving': True,
