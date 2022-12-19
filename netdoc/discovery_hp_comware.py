@@ -62,17 +62,14 @@ def discovery(nr):
             task=netmiko_send_command, name="display ip interface", command_string="display ip interface", use_textfsm=False, enable=enable
         )
         task.run(
-            task=netmiko_send_command, name="display link-aggregation summary", command_string="display link-aggregation summary", use_textfsm=False, enable=enable
+            task=netmiko_send_command, name="display lldp neighbor-information verbose", command_string="display lldp neighbor-information verbose", use_textfsm=False, enable=enable
         )
-        # task.run(
-        #     task=netmiko_send_command, name="show interfaces switchport", command_string="show interfaces switchport", use_textfsm=False, enable=enable
-        # )
         task.run(
             task=netmiko_send_command, name="display stp", command_string="display stp", use_textfsm=False, enable=enable
         )
         task.run(
             task=netmiko_send_command, name="display port trunk", command_string="display port trunk", use_textfsm=False, enable=enable
-        ) # only on switches; on routers info is in show interfaces
+        )
         task.run(
             task=netmiko_send_command, name="display vrrp", command_string="display vrrp", use_textfsm=False, enable=enable
         )
