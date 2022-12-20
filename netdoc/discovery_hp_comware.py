@@ -62,9 +62,6 @@ def discovery(nr):
             task=netmiko_send_command, name="display ip interface", command_string="display ip interface", use_textfsm=False, enable=enable
         )
         task.run(
-            task=netmiko_send_command, name="display lldp neighbor-information verbose", command_string="display lldp neighbor-information verbose", use_textfsm=False, enable=enable
-        )
-        task.run(
             task=netmiko_send_command, name="display stp", command_string="display stp", use_textfsm=False, enable=enable
         )
         task.run(
