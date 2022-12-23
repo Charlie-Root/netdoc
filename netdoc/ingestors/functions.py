@@ -917,8 +917,16 @@ def short_interface_name(name):
     name = name.lower()
     if name.startswith("gigabitethernet"):
         return name.replace("gigabitethernet", "gi")
+    if name.startswith("fastethernet"):
+        return name.replace("fastethernet", "fa")
     elif name.startswith("tengigabitethernet"):
         return name.replace("tengigabitethernet", "te")
+    elif name.startswith("ten-gigabitethernet"):
+        return name.replace("ten-gigabitethernet", "te")
+    elif name.startswith("fortygige"):
+        return name.replace("fortygige", "fge")
+    elif name.startswith("hundredgige"):
+        return name.replace("hundredgige", "hge")
     elif name.startswith("ethernet"):
         return name.replace("ethernet", "e")
     elif name.startswith("eth"):
@@ -933,5 +941,11 @@ def short_interface_name(name):
         return name.replace("loopback", "lo")
     elif name.startswith("port-channel"):
         return name.replace("port-channel", "po")
+    elif name.startswith("route-aggregation"):
+        return name.replace("route-aggregation", "ragg")
+    elif name.startswith("bridge-aggregation"):
+        return name.replace("bridge-aggregation", "bagg")
+    elif name.startswith("tunnel"):
+        return name.replace("tunnel", "tu")
     else:
         return name
