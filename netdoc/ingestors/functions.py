@@ -923,6 +923,8 @@ def short_interface_name(name):
         return name.replace("tengigabitethernet", "te")
     elif name.startswith("ten-gigabitethernet"):
         return name.replace("ten-gigabitethernet", "te")
+    elif name.startswith("xge"): # HP Comware
+        return name.replace("xge", "te")
     elif name.startswith("fortygige"):
         return name.replace("fortygige", "fge")
     elif name.startswith("hundredgige"):
