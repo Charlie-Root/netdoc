@@ -82,9 +82,6 @@ def discovery(nr):
         task.run(
             task=netmiko_send_command, name="display ip routing-table", command_string="display ip routing-table", use_textfsm=False, enable=enable
         )
-        task.run(
-            task=netmiko_send_command, name="display ip routing-table|display ip routing-table vpn-instance", command_string="display ip routing-table vpn-instance", use_textfsm=False, enable=enable
-        )
 
     # Run the playbook
     aggregated_results = filtered_devices.run(task=multiple_tasks)
@@ -139,6 +136,9 @@ def discovery(nr):
                 else:
                     task.run(task=netmiko_send_command, name=f'display arp|display arp vpn-instance {vrf}', command_string=f'display arp vpn-instance {vrf}', use_textfsm=False, enable=enable)
                     task.run(task=netmiko_send_command, name=f'display ip vpn-instance instance-name|display ip vpn-instance instance-name {vrf}', command_string=f'display ip vpn-instance instance-name {vrf}', use_textfsm=False, enable=enable)
+                    task.run(
+                        task=netmiko_send_command, name="display ip routing-table|display ip routing-table vpn-instance {vrf}", command_string="display ip routing-table vpn-instance {vrf}", use_textfsm=False, enable=enable
+                    )
 
         # Run the additional playbook
         additional_aggregated_results = current_nr.run(task=additional_tasks)
