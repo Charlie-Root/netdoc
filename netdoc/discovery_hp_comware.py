@@ -68,7 +68,7 @@ def discovery(nr):
             task=netmiko_send_command, name="display port trunk", command_string="display port trunk", use_textfsm=False, enable=enable
         )
         task.run(
-            task=netmiko_send_command, name="display link-aggregation verbose", command_string="ddisplay link-aggregation verbose", use_textfsm=False, enable=enable
+            task=netmiko_send_command, name="display link-aggregation verbose", command_string="display link-aggregation verbose", use_textfsm=False, enable=enable
         )
         task.run(
             task=netmiko_send_command, name="display vrrp", command_string="display vrrp", use_textfsm=False, enable=enable
