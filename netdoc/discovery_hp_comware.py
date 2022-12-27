@@ -68,7 +68,7 @@ def discovery(nr):
             task=netmiko_send_command, name="display port trunk", command_string="display port trunk", use_textfsm=False, enable=enable
         )
         task.run(
-            task=netmiko_send_command, name="ddisplay link-aggregation verbose", command_string="ddisplay link-aggregation verbose", use_textfsm=False, enable=enable
+            task=netmiko_send_command, name="display link-aggregation verbose", command_string="ddisplay link-aggregation verbose", use_textfsm=False, enable=enable
         )
         task.run(
             task=netmiko_send_command, name="display vrrp", command_string="display vrrp", use_textfsm=False, enable=enable
@@ -77,7 +77,7 @@ def discovery(nr):
             task=netmiko_send_command, name="display ospf peer", command_string="display ospf peer", use_textfsm=False, enable=enable
         )
         task.run(
-            task=netmiko_send_command, name="display bgp peer", command_string="display bgp peer", use_textfsm=False, enable=enable
+            task=netmiko_send_command, name="display bgp peer", command_string="display bgp peer ipv4", use_textfsm=False, enable=enable
         )
         task.run(
             task=netmiko_send_command, name="display ip routing-table", command_string="display ip routing-table", use_textfsm=False, enable=enable
