@@ -19,7 +19,7 @@ def discovery(nr):
     Discovery HP Comware devices
     """
     mode = "netmiko"
-    platform = "hp_comnware"
+    platform = "hp_comware"
     filtered_devices = nr.filter(platform=platform)
     enable=True
     logs = []
