@@ -212,7 +212,7 @@ for log in logs:
         pass
 	print('Command: ', log.command)
 	print('ID: ', log.id)
-	print('Address: ', log.address)
+    print('Address: ', log.discoverable.address)
 	print('Device: ', log.discoverable.device)
     print('Parsed: ', log.parsed)
     print('Items: ', len(log.parsed_output))
