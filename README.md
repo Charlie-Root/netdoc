@@ -210,9 +210,14 @@ for log in logs:
         functions.log_parse(log)
     except:
         pass
+	print('Command: ', log.command)
+	print('ID: ', log.id)
+	print('Address: ', log.address)
+	print('Device: ', log.discoverable.device)
+    print('Parsed: ', log.parsed)
+    print('Items: ', len(log.parsed_output))
     pprint.pprint(log.parsed_output)
-    print('Parsed:', log.parsed)
-    print('Items:', len(log.parsed_output))
+    print('-' * 70)
 ~~~
 
 Ingest scripts:
