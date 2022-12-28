@@ -196,19 +196,20 @@ mode = None
 
 logs = models.DiscoveryLog.objects.all()
 
-request = "show vrf"
-mode = "netmiko_cisco_nxos"
-request = "show ip interface"
-mode = None
+request = None # or "show vrf"
+mode = None    # or "netmiko_cisco_nxos"
 
 if mode:
-        logs = logs.filter(discoverable__mode=mode)
+    logs = logs.filter(discoverable__mode=mode)
 if request:
-        logs = logs.filter(request=request)
+    logs = logs.filter(request=request)
 logs = logs.filter(success=True)
 
 for log in logs:
-    functions.log_parse(log)
+    try:
+        functions.log_parse(log)
+    except:
+        pass
     pprint.pprint(log.parsed_output)
     print('Parsed:', log.parsed)
     print('Items:', len(log.parsed_output))
@@ -222,25 +223,23 @@ import importlib
 from netdoc.ingestors import functions
 import logging
 
-request = "show vrf"
-mode = "netmiko_cisco_nxos"
-request = "show ip interface"
-mode = None
+request = None # or "show vrf"
+mode = None    # or "netmiko_cisco_nxos"
 
 logs = models.DiscoveryLog.objects.all()
 if mode:
-        logs = logs.filter(discoverable__mode=mode)
+    logs = logs.filter(discoverable__mode=mode)
 if request:
-        logs = logs.filter(request=request)
+    logs = logs.filter(request=request)
 logs = logs.filter(parsed=True)
 
 for log in logs:
         try:
-                functions.log_ingest(log)
+            functions.log_ingest(log)
         except functions.NoIngestor:
-                pass
+            pass
         except functions.Postponed as err:
-                print(err)
+            print(err)
 ~~~
 
 ## References
