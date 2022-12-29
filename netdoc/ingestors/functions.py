@@ -917,12 +917,14 @@ def short_interface_name(name):
     name = name.lower()
     if name.startswith("gigabitethernet"):
         return name.replace("gigabitethernet", "gi")
-    if name.startswith("fastethernet"):
+    elif name.startswith("fastethernet"):
         return name.replace("fastethernet", "fa")
     elif name.startswith("tengigabitethernet"):
         return name.replace("tengigabitethernet", "te")
-    elif name.startswith("ten-gigabitethernet"):
+    elif name.startswith("ten-gigabitethernet"): # HP Comware
         return name.replace("ten-gigabitethernet", "te")
+    elif name.startswith("m-gigabitethernet"): # HP Comware
+        return name.replace("m-gigabitethernet", "mge")
     elif name.startswith("xge"): # HP Comware
         return name.replace("xge", "te")
     elif name.startswith("fortygige"):
