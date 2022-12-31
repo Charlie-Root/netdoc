@@ -14,6 +14,7 @@ from netdoc.ingestors.functions import log_ingest
 
 INVALID_RE = [
     # WARNING: must specify ^/$ or a very unique string not found in valid outputs
+    r"^Traceback", # Python traceback
     r"^$", # Empty result
     r"^\^", # Cisco Error (e.g. "^Note: ")
     r"^% ", # Generic Cisco error (e.g. "% Invalid command")
