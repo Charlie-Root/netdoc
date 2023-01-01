@@ -40,13 +40,9 @@ def ingest(log, force=False):
             'duplex': functions.normalize_interface_duplex(item['duplex']),
             'speed': functions.normalize_interface_bandwidth(item['bandwidth']),
             'name': interface_name,
-            'mac_address': item['address'].pop(),
+            'mac_address': item['hw_address'].pop() if item['hw_address'] else None,
+            'mode': functions.normalize_switchport_mode(item['port_link_type']),
         }
-        if item['port_link_type'] == 'Trunk' and item['vlan_native']:
-            # Interface is configured to read 802.1Q
-            vlan_o = functions.set_get_vlan(vid=item['vlan_native'], site=site_o)
-            args['mode'] = functions.normalize_switchport_mode('trunk')
-            args['untagged_vlan'] = vlan_o
 
         try:
             args['mtu'] = int(item['mtu'])
@@ -60,11 +56,13 @@ def ingest(log, force=False):
         # Trusted data: we always update some data
         interface_o = functions.set_get_interface(label=interface_name, device=device_o, create_kwargs=args, update_kwargs=args)
  
-         if force:
+        if force:
             # Clear all associated IP addresses
             interface_o.tagged_vlans.clear()
 
         if args['mode'] == 'tagged':
+            # Add native VLAN
+            args['untagged_vlan'] = functions.set_get_vlan(vid=item['vlan_native'], site=site_o)
             # Add VLANs to the interface
             for vid in trunking_vlans:
                 vlan_o = functions.set_get_vlan(vid=vid, site=site_o)

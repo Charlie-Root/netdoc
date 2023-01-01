@@ -705,6 +705,7 @@ def normalize_interface_bandwidth(bandwidth):
     bandwidth = bandwidth.lower()
     bandwidth = bandwidth.replace(' ', '')
     bandwidth = bandwidth.replace('kbit', '')
+    bandwidth = bandwidth.replace('kbps', '')
     bandwidth = bandwidth.replace('mbps', '000')
     bandwidth = bandwidth.replace('mb/s', '000')
     bandwidth = bandwidth.replace('gb/s', '000000')
@@ -833,6 +834,7 @@ def normalize_vlan(vlan):
         return [vlan]
 
     vlan = vlan.lower()
+    vlan = vlan.replace('(default vlan)', '')
     vlan = vlan.replace(' ', '')
     if vlan == 'all':
         # All VLANs
