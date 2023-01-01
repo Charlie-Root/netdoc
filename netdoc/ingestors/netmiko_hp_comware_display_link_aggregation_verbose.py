@@ -12,6 +12,7 @@ from slugify import slugify
 from . import functions
 
 def ingest(log, force=False):
+    print("A")
     """
     Processing show etherchannel summary.
     """
