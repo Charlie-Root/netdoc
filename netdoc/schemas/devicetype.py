@@ -1,5 +1,4 @@
 """Schema validation for DeviceType."""
-from dcim.models import Model
 
 
 def get_schema():
@@ -12,9 +11,6 @@ def get_schema():
             },
             "model": {
                 "type": "string",
-                "enum": list(
-                    Model.objects.all().order_by("name").values_list("name", flat=True)
-                ),
             },
             "description": {
                 "type": "string",
