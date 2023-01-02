@@ -1,8 +1,8 @@
-"""Schema validation for Site."""
+"""Schema validation for Manufacturer."""
 
 
 def get_schema():
-    """Return the JSON schema to validate Site data."""
+    """Return the JSON schema to validate Manufacturer data."""
     return {
         "type": "object",
         "properties": {
