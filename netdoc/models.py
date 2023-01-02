@@ -175,10 +175,14 @@ class DiscoveryLog(NetBoxModel):
         related_name='discoverylogs',
         editable=False,
     )
+    enable = models.BooleanField(
+        default=False, editable=False,
+    ) #: True if the CMD has been executed with privilege escalation via enable.
     parsed_output = models.JSONField(default=list, editable=False)
     raw_output = models.TextField(
         default="", blank=True, editable=False,
     )
+    ingestor = models.CharField(max_length=255, editable=False)  #: Function to be used to ingest the data
     request = models.CharField(max_length=255, editable=False)  #: API request used in Netnmiko discovery (define the template parser)
     success = models.BooleanField(default=False, editable=False) # True if excuting request return OK and raw_output is valid (avoid command not found)
     parsed = models.BooleanField(default=False, editable=False)  #: True if parsing raw_output return a valid JSON
