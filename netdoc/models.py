@@ -23,6 +23,7 @@ class DiscoveryModeChoices(ChoiceSet):
         ('netmiko_cisco_ios', 'Netmiko Cisco IOS'),
         ('netmiko_cisco_nxos', 'Netmiko Cisco NX-OS'),
         ('netmiko_cisco_xr', 'Netmiko Cisco XR'),
+        ('netmiko_hp_comware', 'Netmiko HPE Comware'),
         ('netmiko_linux', 'Netmiko Linux'),
     ]
 

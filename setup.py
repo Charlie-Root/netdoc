@@ -22,7 +22,7 @@ setup(
     description='Network Documentation plugin for NetBox',
     url='https://github.com/dainok/netdoc',
     author='Andrea Dainese',
-    author_email='andrea.dainese@pm.me',
+    author_email='andrea@adainese.it',
     license='GNU v3.0',
     install_requires=['python-slugify', 'nornir==3.3.0', 'nornir_utils==0.2.0', 'nornir_netmiko==0.1.2', 'ipaddress', 'macaddress', 'ouilookup'],
     packages=find_packages(),

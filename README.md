@@ -14,7 +14,7 @@ Network diagrams are currently provided by netbox-topology-views plugin. See [my
 You should follow the offical documentation, but just in case here is how I install netbox:
 
 ~~~
-sudo apt install -y apache2 python3 python3-pip python3-venv python3-dev build-essential libxml2-dev libxslt1-dev libffi-dev libpq-dev libssl-dev zlib1g-dev
+sudo apt install -y apache2 python3 python3-pip python3-venv python3-dev build-essential libxml2-dev libxslt1-dev libffi-dev libpq-dev libssl-dev zlib1g-dev postgresql redis
 sudo useradd -M -U -d /opt/netbox netbox
 sudo git clone --depth=1 https://github.com/netbox-community/netbox /opt/netbox
 sudo chown netbox:netbox /opt/netbox/ -R
@@ -197,22 +197,28 @@ mode = None
 
 logs = models.DiscoveryLog.objects.all()
 
-request = "show vrf"
-mode = "netmiko_cisco_nxos"
-request = "show ip interface"
-mode = None
+request = None # or "show vrf"
+mode = None    # or "netmiko_cisco_nxos"
 
 if mode:
-        logs = logs.filter(discoverable__mode=mode)
+    logs = logs.filter(discoverable__mode=mode)
 if request:
-        logs = logs.filter(request=request)
+    logs = logs.filter(request=request)
 logs = logs.filter(success=True)
 
 for log in logs:
-    functions.log_parse(log)
+    try:
+        functions.log_parse(log)
+    except:
+        pass
+	print('Command: ', log.command)
+	print('ID: ', log.id)
+    print('Address: ', log.discoverable.address)
+	print('Device: ', log.discoverable.device)
+    print('Parsed: ', log.parsed)
+    print('Items: ', len(log.parsed_output))
     pprint.pprint(log.parsed_output)
-    print('Parsed:', log.parsed)
-    print('Items:', len(log.parsed_output))
+    print('-' * 70)
 ~~~
 
 Ingest scripts:
@@ -223,25 +229,23 @@ import importlib
 from netdoc.ingestors import functions
 import logging
 
-request = "show vrf"
-mode = "netmiko_cisco_nxos"
-request = "show ip interface"
-mode = None
+request = None # or "show vrf"
+mode = None    # or "netmiko_cisco_nxos"
 
 logs = models.DiscoveryLog.objects.all()
 if mode:
-        logs = logs.filter(discoverable__mode=mode)
+    logs = logs.filter(discoverable__mode=mode)
 if request:
-        logs = logs.filter(request=request)
+    logs = logs.filter(request=request)
 logs = logs.filter(parsed=True)
 
 for log in logs:
         try:
-                functions.log_ingest(log)
+            functions.log_ingest(log)
         except functions.NoIngestor:
-                pass
+            pass
         except functions.Postponed as err:
-                print(err)
+            print(err)
 ~~~
 
 ## References

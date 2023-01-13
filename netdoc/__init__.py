@@ -17,7 +17,7 @@ class NetdocConfig(PluginConfig):
     description = 'Automatic Network Documentation plugin for NetBox'
     version = __version__
     author = 'Andrea Dainese'
-    author_email = 'andrea.dainese@pm.me'
+    author_email = 'andrea@adainese.it'
     base_url = 'netdoc'
     required_settings = ['NTC_TEMPLATES_DIR']
     default_settings = {

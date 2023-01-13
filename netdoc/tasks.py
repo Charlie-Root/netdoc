@@ -15,7 +15,7 @@ from nornir.core.plugins.inventory import InventoryPluginRegister
 from .nornir_inventory import AssetInventory
 from nornir import InitNornir
 from nornir.core.filter import F
-from . import discovery_linux, discovery_cisco_ios, discovery_cisco_nxos, discovery_cisco_xr
+from . import discovery_linux, discovery_hp_comware, discovery_cisco_ios, discovery_cisco_nxos, discovery_cisco_xr
 
 PLUGIN_SETTINGS = settings.PLUGINS_CONFIG.get('netdoc', {})
 
@@ -56,7 +56,8 @@ def discovery(addresses):
 
     # Starting discovery job
     pprint.pprint(nr.dict())
-    discovery_linux.discovery(nr)
     discovery_cisco_ios.discovery(nr)
     discovery_cisco_nxos.discovery(nr)
     discovery_cisco_xr.discovery(nr)
+    discovery_hp_comware.discovery(nr)
+    discovery_linux.discovery(nr)
