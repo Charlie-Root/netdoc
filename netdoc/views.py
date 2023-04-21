@@ -230,7 +230,7 @@ class DiscoverableDiscoverView(generic.ObjectDeleteView):
             queue = django_rq.get_queue('default')
             queue.enqueue(tasks.discovery, addresses)
 
-            msg = 'Stareted discovery on {}'.format(obj)
+            msg = f'Stareted discovery on {obj}'
             logger.info(msg)
             messages.success(request, msg)
 
@@ -241,8 +241,6 @@ class DiscoverableDiscoverView(generic.ObjectDeleteView):
 
         else:
             logger.debug("Form validation failed")
-            pass
-
         return render(request, self.template_name, {
             'object': obj,
             'form': form,
@@ -317,7 +315,10 @@ class DiscoverableBulkDiscoverView(generic.BulkDeleteView):
         # Retrieve objects being deleted
         table = self.table(self.queryset.filter(pk__in=pk_list), orderable=False)
         if not table.rows:
-            messages.warning(request, "No {} were selected for discovery.".format(model._meta.verbose_name_plural))
+            messages.warning(
+                request,
+                f"No {model._meta.verbose_name_plural} were selected for discovery.",
+            )
             return redirect(self.get_return_url(request))
 
         return render(request, self.template_name, {

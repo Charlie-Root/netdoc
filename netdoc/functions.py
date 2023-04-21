@@ -41,11 +41,7 @@ class FailedToParse(Exception):
 
 
 def is_config(cmd):
-    for regex in CONFIG_CMD:
-        # Check if the command expects a configuration
-        if re.search(regex, cmd):
-            return True
-    return False
+    return any(re.search(regex, cmd) for regex in CONFIG_CMD)
 
 
 def log_create(discoverable=None, raw_output=None, request=None, **kwargs):
@@ -86,12 +82,11 @@ def log_parse(log):
         platform = '_'.join(log.discoverable.mode.split('_')[1:])
     except:
         raise ModeNotDetected
-    if framework == 'netmiko':
-        parsed_output = parse_netmiko_output(log.raw_output, platform=platform, command=log.request)
-        parsed = True
-    else:
+    if framework != 'netmiko':
         raise ModeNotDetected
 
+    parsed_output = parse_netmiko_output(log.raw_output, platform=platform, command=log.request)
+    parsed = True
     log.parsed = parsed
     log.parsed_output = parsed_output
     log.save()
@@ -109,8 +104,4 @@ def parse_netmiko_output(output, command=None, platform=None):
 
 
 def valid_output(output):
-    for regex in INVALID_RE:
-        # Check if the output is valid
-        if re.search(regex, output):
-            return False
-    return True
+    return not any(re.search(regex, output) for regex in INVALID_RE)

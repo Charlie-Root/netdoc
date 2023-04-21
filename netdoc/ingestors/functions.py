@@ -64,8 +64,6 @@ def set_get_arpentry(interface=None, ip_address=False, mac_address=None):
         lookup_kwargs['vendor'] = list(OuiLookup().query(mac_address).pop().values()).pop()
     except:
         logging.error('Cannot get vendor, try to update with: ouilookup -u')
-        pass
-
     arpentry_o = model_get_or_create(model_name=model, lookup_kwargs=lookup_kwargs)
     # Update timestamp
     arpentry_o.save()
@@ -160,10 +158,10 @@ def set_get_device(name=None, create=False, create_kwargs=None, update_kwargs=No
         manufacturer_slug = slugify(create_kwargs['manufacturer'])
         device_type_slug = slugify(create_kwargs['device_type'])
         device_type_o = set_get_device_type(slug=f'{manufacturer_slug}-{device_type_slug}', create_kwargs={'name':create_kwargs['device_type'], 'manufacturer':create_kwargs['manufacturer']})
-    elif 'manufacturer' in create_kwargs and 'device_type' not in create_kwargs:
+    elif 'manufacturer' in create_kwargs:
         # Using the default device_type for a given manufacturer
         device_type_o = set_get_device_type(create_kwargs={'manufacturer':create_kwargs['manufacturer']})
-    elif 'manufacturer' not in create_kwargs and 'device_type' in create_kwargs:
+    elif 'device_type' in create_kwargs:
         # Using the default manufacturer for a given device_type
         device_type_o = set_get_device_type(create_kwargs={'name':create_kwargs['device_type']})
     else:
@@ -202,9 +200,7 @@ def set_get_discoverable(address=None, device=None, site=None, force=False, **kw
     discoverable_o = None
 
     try:
-        # Discoverable with same address and Device already exists
-        discoverable_o = Discoverable.objects.get(address=address, device=device, site=site)
-        return discoverable_o
+        return Discoverable.objects.get(address=address, device=device, site=site)
     except Discoverable.DoesNotExist:
         pass
 
@@ -217,33 +213,31 @@ def set_get_discoverable(address=None, device=None, site=None, force=False, **kw
     # Duplicated discoverable with same device exists
     duplicated_discoverable_o = Discoverable.objects.filter(device=device, site=site).exclude(address=address).first()
 
-    if discoverable_o and duplicated_discoverable_o:
-        # Discoverable exist but Device is assigned to another Discoverable
-        if force:
-            # discoverable_o takes precedence
-            duplicated_discoverable_o.device = None
-            duplicated_discoverable_o.save()
-            discoverable_o.device = device
-            discoverable_o.save()
-            return discoverable_o
-        else:
-            # duplicated_discoverable_o takes precedence
-            return duplicated_discoverable_o
-    elif discoverable_o and not duplicated_discoverable_o:
+    if discoverable_o and duplicated_discoverable_o and force:
+        # discoverable_o takes precedence
+        duplicated_discoverable_o.device = None
+        duplicated_discoverable_o.save()
+        discoverable_o.device = device
+        discoverable_o.save()
+        return discoverable_o
+    elif (
+        discoverable_o
+        and duplicated_discoverable_o
+        or not discoverable_o
+        and duplicated_discoverable_o
+        and not force
+    ):
+        # duplicated_discoverable_o takes precedence
+        return duplicated_discoverable_o
+    elif not discoverable_o and duplicated_discoverable_o:
+        # discoverable_o takes precedence
+        duplicated_discoverable_o.device = None
+        duplicated_discoverable_o.save()
+    elif discoverable_o:
         # Discoverable exists without Device
         discoverable_o.device = device
         discoverable_o.save()
         return discoverable_o
-    elif not discoverable_o and duplicated_discoverable_o:
-        # Discoverable not exist but Device is assinged to a different Discoverable
-        if force:
-            # discoverable_o takes precedence
-            duplicated_discoverable_o.device = None
-            duplicated_discoverable_o.save()
-        else:
-            # duplicated_discoverable_o takes precedence
-            return duplicated_discoverable_o
-
     # Discoverable with same Device and address not found
     if address and site:
         discoverable_o = Discoverable.objects.create(device=device, site=site, address=address, **kwargs)
@@ -318,11 +312,10 @@ def set_get_device_type(slug=None, create=False, create_kwargs=None, update_kwar
         if 'manufacturer' in create_kwargs:
             # Forcing slug from name and manufacturer
             manufacturer_o = set_get_manufacturer(create_kwargs={'name': create_kwargs['manufacturer']})
-            create_kwargs['manufacturer'] = manufacturer_o
         else:
             # Using the default manufacturer
             manufacturer_o = set_get_manufacturer()
-            create_kwargs['manufacturer'] = manufacturer_o
+        create_kwargs['manufacturer'] = manufacturer_o
         if 'model' in create_kwargs:
             # Forcing slug from model
             slug = f'{slugify(create_kwargs["model"])}-{manufacturer_o.slug}'
@@ -419,8 +412,6 @@ def set_get_macaddressentry(interface=None, vvid=False, mac_address=None):
         lookup_kwargs['vendor'] = list(OuiLookup().query(mac_address).pop().values()).pop()
     except:
         logging.error('Cannot get vendor, try to update with: ouilookup -u')
-        pass
-
     macaddressentry_o = model_get_or_create(model_name=model, lookup_kwargs=lookup_kwargs)
     # Update timestamp
     macaddressentry_o.save()
@@ -512,10 +503,7 @@ def set_get_route(device=None, destination=None, distance=None, metric=None, nex
     try:
         lookup_kwargs['metric'] = int(metric)
     except:
-        if type == 'c':
-            lookup_kwargs['metric'] = 0
-        else:
-            lookup_kwargs['metric'] = 256
+        lookup_kwargs['metric'] = 0 if type == 'c' else 256
     try:
         lookup_kwargs['distance'] = int(distance)
     except:
@@ -526,10 +514,9 @@ def set_get_route(device=None, destination=None, distance=None, metric=None, nex
         else:
             lookup_kwargs['distance'] = 256
 
-    route_o = model_get_or_none(model_name=model, **lookup_kwargs)
-    if not route_o:
-        route_o = model_get_or_create(model_name=model, lookup_kwargs=lookup_kwargs)
-    return route_o
+    return model_get_or_none(
+        model_name=model, **lookup_kwargs
+    ) or model_get_or_create(model_name=model, lookup_kwargs=lookup_kwargs)
 
 
 def set_get_vlan(vid=None, name=None, site=None, create=False, create_kwargs=None, update_kwargs=None):
@@ -539,8 +526,6 @@ def set_get_vlan(vid=None, name=None, site=None, create=False, create_kwargs=Non
     Lookup: vid, name, site are unique
     Create: name is mandatory
     """
-    model = 'VLAN'
-
     if not create_kwargs:
         create_kwargs = {}
     if not update_kwargs:
@@ -548,10 +533,12 @@ def set_get_vlan(vid=None, name=None, site=None, create=False, create_kwargs=Non
 
     if name:
         lookup_kwargs = {'vid': vid, 'name': name, 'site': site}
-        
-        if not 'status' in create_kwargs:
+
+        if 'status' not in create_kwargs:
             # Set default status
             create_kwargs['status'] = 'active'
+
+        model = 'VLAN'
 
         vlan_o = model_get_or_none(model_name=model, **lookup_kwargs)
         if not vlan_o and (create_kwargs or create):
@@ -851,22 +838,18 @@ def normalize_vlan(vlan):
             return list(range(int(vlan.split('-')[0]), int(vlan.split('-')[1]) + 1))
         except:
             logging.warning(f'cannot convert VLAN {vlan} range to integer')
-            pass
     else:
         try:
             return [int(vlan)]
         except:
             logging.warning(f'cannot convert VLAN {vlan} to integer')
-            pass
     return []
 
 
 def parent_interface(label):
     label = short_interface_name(label)
     if re.match(r"^[^.]+\.[0-9]+$", label):
-        # Contains only one "." and ends with numbers
-        parent_label = re.sub(r".[0-9]+$", "", label)
-        return parent_label
+        return re.sub(r".[0-9]+$", "", label)
     return None
 
 

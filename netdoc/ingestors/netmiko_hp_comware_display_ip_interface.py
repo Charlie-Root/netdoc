@@ -51,7 +51,7 @@ def ingest(log, force=False):
         # List all IP addresses
         addresses = []
         addresses_text = []
-        for index, ipaddr in enumerate(item["ipaddr"]):
+        for ipaddr in item["ipaddr"]:
             addresses.append(ipaddress.IPv4Interface(f'{ipaddr}'))
             addresses_text.append(str(ipaddress.IPv4Interface(f'{ipaddr}')))
 

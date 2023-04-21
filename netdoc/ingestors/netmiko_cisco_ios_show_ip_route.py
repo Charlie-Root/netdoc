@@ -35,8 +35,6 @@ def ingest(log, force=False):
             vrf_name = None
 
         device_o = log.discoverable.device
-        interface_name = item['nexthop_if']
-
         args = {
             'device': device_o,
             'distance': item['distance'],
@@ -45,14 +43,14 @@ def ingest(log, force=False):
             'type': item['protocol'],
         }
 
-        if item['nexthop_if']:
+        if interface_name := item['nexthop_if']:
             args['nexthop_if'] = functions.set_get_interface(label=interface_name, device=device_o, create_kwargs={'name': interface_name})
         if item['nexthop_ip']:
             args['nexthop_ip'] = item['nexthop_ip']
         if vrf_name:
             vrf_o = functions.set_get_vrf(name=vrf_name, create_kwargs={})
             args['vrf'] = vrf_o
-        
+
         route_o = functions.set_get_route(**args)
 
     # Update the log

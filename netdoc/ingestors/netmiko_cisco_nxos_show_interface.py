@@ -55,13 +55,12 @@ def ingest(log, force=False):
         except ValueError:
             pass
 
-        interface_parent = functions.parent_interface(interface_name)
-        if interface_parent:
+        if interface_parent := functions.parent_interface(interface_name):
             args['parent'] = functions.set_get_interface(label=interface_parent, device=device_o)
 
         # Trusted data: we always update some data
         interface_o = functions.set_get_interface(label=interface_name, device=device_o, create_kwargs=args, update_kwargs=args)
- 
+
     # Update the log
     log.ingested = True
     log.save()

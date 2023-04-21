@@ -29,16 +29,13 @@ def ingest(log, force=False):
         raise functions.Postponed(f'Device is required, postponing {log.pk}')
 
     for item in log.parsed_output:
-        # Parsing
-        # TODO: TBD
-        vrf_name = item['vrf']
         device_o = log.discoverable.device
         interface_name = item['interface']
         site_o = device_o.site
         create_args = {
             'name': interface_name,
         }
-        if vrf_name:
+        if vrf_name := item['vrf']:
             vrf_o = functions.set_get_vrf(name=vrf_name, create_kwargs={})
             update_args = {'vrf': vrf_o}
         else:

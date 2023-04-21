@@ -43,13 +43,8 @@ def ingest(log, force=False):
         if not item['native_vlan']:
             continue
         native_vlan=int(item["native_vlan"])
-        
-        trunking_vlans=functions.normalize_trunking_vlans(item["trunking_vlans"])
 
-        if item["access_vlan"] == 'unassigned':
-            access_vlan=0
-        else:
-            access_vlan=int(item["access_vlan"])
+        trunking_vlans=functions.normalize_trunking_vlans(item["trunking_vlans"])
 
         if mode == 'tagged' and len(trunking_vlans) == 4094:
             # Trunk with all VLANs
@@ -62,6 +57,11 @@ def ingest(log, force=False):
                 'untagged_vlan': vlan_o,
             }
         else:
+            access_vlan = (
+                0
+                if item["access_vlan"] == 'unassigned'
+                else int(item["access_vlan"])
+            )
             # Access
             vlan_o = functions.set_get_vlan(vid=access_vlan, site=site_o)
             args = {
